@@ -1,5 +1,5 @@
 
-FROM ipropertygroup/nginx:php7
+FROM ipropertygroup/webserver:nginx-php-7
 MAINTAINER MOHSEN@IPROPERTY
 
 ENV DEBIAN_FRONTEND noninteractive
