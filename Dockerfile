@@ -11,15 +11,18 @@ RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev git && rm -rf 
 	&& docker-php-ext-install gd mysqli pdo pdo_mysql
 
 # install phpredis extension
-
 ENV PHPREDIS_VERSION 3.0.0
-RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
-    && tar xfz /tmp/redis.tar.gz \
-    && rm -r /tmp/redis.tar.gz \
-    && mkdir -p /usr/src/php/ext/ \
-    && mv phpredis-$PHPREDIS_VERSION /usr/src/php/ext/redis \
-    && docker-php-ext-install redis
-    
+RUN wget -O /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
+	&& mkdir -p /tmp/redis \
+	&& tar xzf /tmp/redis.tar.gz -C /tmp/redis --strip-components=1 \
+	&& cd /tmp/redis \
+	&& phpize \
+	&& ./configure \
+	&& make \
+	&& make install \
+	&& echo "extension=redis.so" > /usr/local/etc/php/conf.d/ext-redis.ini \
+	&& rm -rf /tmp/redis.tar.gz /tmp/redis
+
 #install node
 ENV NODE_VERSION 6.4.0
 # gpg keys listed at https://github.com/nodejs/node
