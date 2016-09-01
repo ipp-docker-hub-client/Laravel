@@ -4,15 +4,22 @@ MAINTAINER MOHSEN@IPROPERTY
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV NPM_CONFIG_LOGLEVEL info
-ENV NODE_VERSION 6.4.0
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev git && rm -rf /var/lib/apt/lists/* \
 	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
-	&& docker-php-ext-install gd mysqli pdo pdo_mysql \
-	&& docker-php-ext-enable redis
+	&& docker-php-ext-install gd mysqli pdo pdo_mysql
 
+# install phpredis extension
+ENV PHPREDIS_VERSION 2.2.7
+RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
+    && tar xfz /tmp/redis.tar.gz \
+    && rm -r /tmp/redis.tar.gz \
+    && mv phpredis-$PHPREDIS_VERSION /usr/src/php/ext/redis \
+    && docker-php-ext-install redis
+    
 #install node
+ENV NODE_VERSION 6.4.0
 # gpg keys listed at https://github.com/nodejs/node
 RUN set -ex \
   && for key in \
