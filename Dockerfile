@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev git && rm -rf 
 
 # install phpredis extension
 ENV PHPREDIS_VERSION 3.0.0
-RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
+RUN curl -sL /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
     && tar xfz /tmp/redis.tar.gz \
     && rm -r /tmp/redis.tar.gz \
     && mkdir -p /usr/src/php/ext/ \
