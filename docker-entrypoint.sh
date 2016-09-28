@@ -6,6 +6,8 @@ then
   chown -R 0:0 /var/www
   cd /var/www
   if [ $CAENV = "production" ]; then mv .env.production .env; else mv .env.staging .env; fi
+  echo "Setting up new relic dynamics ..."
+  /newrelic.sh
   echo "Running PHP-FPM ..."
   php-fpm --allow-to-run-as-root --nodaemonize &
   echo "Running Nginx ..."
