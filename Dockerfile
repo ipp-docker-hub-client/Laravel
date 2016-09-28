@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev git && rm -rf 
 
 # install phpredis extension
 ENV PHPREDIS_VERSION 3.0.0
-RUN curl -sL /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
+RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
     && tar xfz /tmp/redis.tar.gz \
     && rm -r /tmp/redis.tar.gz \
     && mkdir -p /usr/src/php/ext/ \
@@ -20,7 +20,7 @@ RUN curl -sL /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHP
     && docker-php-ext-install redis
 
 # install NewRelic
-RUN (curl -L -o https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
+RUN (curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
   sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' && \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y newrelic-php5 && \
