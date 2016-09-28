@@ -25,7 +25,7 @@ RUN (curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y newrelic-php5 && \
   apt-get clean) && \
-  ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20131226.so /usr/local/lib/php/extensions/no-debug-non-zts-20131226/newrelic.so && \
+  ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20131226.so /usr/src/php/ext/newrelic.so && \
   cp /etc/php5/mods-available/newrelic.ini /usr/local/etc/php/conf.d/newrelic.ini
 
 #install node
