@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev git && rm -rf 
 	&& docker-php-ext-install gd mysqli pdo pdo_mysql
 
 # install phpredis extension
-
 ENV PHPREDIS_VERSION 3.0.0
 RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
     && tar xfz /tmp/redis.tar.gz \
@@ -19,7 +18,16 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$P
     && mkdir -p /usr/src/php/ext/ \
     && mv phpredis-$PHPREDIS_VERSION /usr/src/php/ext/redis \
     && docker-php-ext-install redis
-    
+
+# install NewRelic
+RUN (wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
+  sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' && \
+  apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y newrelic-php5 && \
+  apt-get clean) && \
+  ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20131226.so /usr/local/lib/php/extensions/no-debug-non-zts-20131226/newrelic.so && \
+  cp /etc/php5/mods-available/newrelic.ini /usr/local/etc/php/conf.d/newrelic.ini
+
 #install node
 ENV NODE_VERSION 6.4.0
 # gpg keys listed at https://github.com/nodejs/node
