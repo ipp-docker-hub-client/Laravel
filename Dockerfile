@@ -20,7 +20,7 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$P
     && docker-php-ext-install redis
 
 # install NewRelic
-RUN (wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
+RUN (curl -L -o https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
   sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' && \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y newrelic-php5 && \
