@@ -6,10 +6,10 @@ then
   chown -R 0:0 /var/www
   cd /var/www
   echo "Enabling configs for ${CAENV} environment ..."
-    if [ $CAENV = "production" ]
+    if [ "${CAENV}" = "production" ]
     then 
       mv .env.production .env
-    elif [ $CAENV = "staging" ]
+    elif [ "${CAENV}" = "staging" ]
     then 
       mv .env.staging .env
     else
