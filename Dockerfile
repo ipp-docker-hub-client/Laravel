@@ -69,8 +69,7 @@ RUN buildDeps='xz-utils' \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
 COPY docker-entrypoint.sh /entrypoint.sh
-COPY newrelic.sh /newrelic.sh
-RUN chmod +x /entrypoint.sh /newrelic.sh
+RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]
