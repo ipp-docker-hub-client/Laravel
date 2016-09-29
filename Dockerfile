@@ -30,10 +30,10 @@ RUN curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
 
 # install sumologic
 RUN apt-get -qq update && apt-get install -y wget && \
-    wget https://www.dropbox.com/path/to/sumocollector_19.91-2_amd64.deb  && \
-    dpkg -i sumocollector_19.91-2_amd64.deb  && \
-    rm sumocollector_19.91-2_amd64.deb  && \
-    echo -e "name=$sumoname\naccessid=sumoid\naccesskey=sumokey" > /etc/sumo.conf
+    curl -L -o /tmp/sumocollector.deb https://collectors.au.sumologic.com/rest/download/deb/64  && \
+    dpkg -i /tmp/sumocollector.deb  && \
+    rm -f /tmp/sumocollector.deb  && \
+    echo -e "name=$sumoname\naccessid=$sumoid\naccesskey=$sumokey" > /etc/sumo.conf
 
 #install node
 ENV NODE_VERSION 6.4.0
