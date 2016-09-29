@@ -9,8 +9,11 @@ then
     if [ $CAENV = "production" ]
     then 
       mv .env.production .env
-    else 
+    elif [ $CAENV = "staging" ]
+    then 
       mv .env.staging .env
+    else
+      echo "Environment veriable is not set! Task aborted."
     fi
   echo "Done."
   echo "Setting up Sumologic configs ..."
