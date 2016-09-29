@@ -27,7 +27,7 @@ RUN curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - \
     && apt-get update \
     && apt-get install -y newrelic-php5 \ 
     && apt-get clean \
-    && ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20131226.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/newrelic.so
+    && newrelic-install install
 COPY newrelic.ini /usr/local/etc/php/conf.d/newrelic.ini
 
 # install sumologic
