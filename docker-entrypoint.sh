@@ -8,6 +8,8 @@ then
   if [ $CAENV = "production" ]; then mv .env.production .env; else mv .env.staging .env; fi
   echo "Setting up new relic dynamics ..."
   /newrelic.sh
+  echo "Starting Sumologin collector ..."
+  service collector start 
   echo "Running PHP-FPM ..."
   php-fpm --allow-to-run-as-root --nodaemonize &
   echo "Running Nginx ..."
