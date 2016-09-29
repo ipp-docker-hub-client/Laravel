@@ -13,14 +13,24 @@ then
       mv .env.staging .env
     fi
   echo "Done."
-  echo "Setting up new relic configs ..."
+  echo "Setting up Sumologic configs ..."
+    if [ "${SUMOLOGIC_KEY}" != "**None**" ]
+    then
+      sed -i "s/SLNAME/"${SUMOLOGIC_NAME}"/g" /etc/sumo.conf
+      sed -i "s/SLID/"${SUMOLOGIC_ID}"/g" /etc/sumo.conf
+      sed -i "s/SLKEY/"${SUMOLOGIC_KEY}"/g" /etc/sumo.conf
+    else
+      echo "No Sumologic key found! Task aborted."
+    fi
+  echo "Done."
+  echo "Setting up Newrelic configs ..."
     if [ "${NEWRELIC_LICENSE}" != "**None**" ]
     then
-      sed -i "s/newrelic.license = ""/newrelic.license = "${NEWRELIC_LICENSE}"/g" /usr/local/etc/php/conf.d/newrelic.ini
-      sed -i "s/;newrelic.enabled = true/newrelic.enabled = true/g" /usr/local/etc/php/conf.d/newrelic.ini
-      sed -i 's/newrelic.appname = "PHP Application"/newrelic.appname = "${NEWRELIC_APPNAME}"/g' /usr/local/etc/php/conf.d/newrelic.ini
+      sed -i "s/newrelic.enabled = false/newrelic.enabled = true/g" /usr/local/etc/php/conf.d/newrelic.ini
+      sed -i "s/NRKEY/"${NEWRELIC_LICENSE}"/g" /usr/local/etc/php/conf.d/newrelic.ini
+      sed -i 's/NRNAME/"${NEWRELIC_APPNAME}"/g' /usr/local/etc/php/conf.d/newrelic.ini
     else
-      echo "No newrelic license found!"
+      echo "No Newrelic license found! Task aborted."
     fi
   echo "Done."
   echo "Starting Sumologin collector ..."
