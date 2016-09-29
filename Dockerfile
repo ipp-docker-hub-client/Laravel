@@ -4,6 +4,7 @@ MAINTAINER MOHSEN@IPROPERTY
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV NPM_CONFIG_LOGLEVEL info
+ENV NR_INSTALL_SILENT true
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev git && rm -rf /var/lib/apt/lists/* \
