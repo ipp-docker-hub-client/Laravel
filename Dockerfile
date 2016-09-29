@@ -20,6 +20,7 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$P
     && docker-php-ext-install redis
 
 # install NewRelic
+ENV NEWRELIC_LICENSE **None**
 RUN curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - \
     && sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' \
     && apt-get update \
@@ -29,8 +30,8 @@ RUN curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - \
 COPY newrelic.ini /usr/local/etc/php/conf.d/newrelic.ini
 
 # install sumologic
-RUN apt-get -qq update && apt-get install -y wget && \
-    && curl -L -o /tmp/sumocollector.deb https://collectors.au.sumologic.com/rest/download/deb/64 \
+ENV SUMOLOGIC_KEY **None**
+RUN curl -L -o /tmp/sumocollector.deb https://collectors.au.sumologic.com/rest/download/deb/64 \
     && dpkg -i /tmp/sumocollector.deb \
     && rm -f /tmp/sumocollector.deb
 COPY sumologic.conf /etc/sumo.conf
