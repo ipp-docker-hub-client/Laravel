@@ -7,8 +7,8 @@ ENV NPM_CONFIG_LOGLEVEL info
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev git && rm -rf /var/lib/apt/lists/* \
-	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
-	&& docker-php-ext-install gd mysqli pdo pdo_mysql
+    && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
+    && docker-php-ext-install gd mysqli pdo pdo_mysql
 
 # install phpredis extension
 ENV PHPREDIS_VERSION 3.0.0
@@ -20,23 +20,23 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$P
     && docker-php-ext-install redis
 
 # install NewRelic
+RUN curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - \
+    && sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' \
+    && apt-get update \
+    && apt-get install -y newrelic-php5 \ 
+    && apt-get clean \
+    && ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20131226.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/newrelic.so
 COPY newrelic.ini /usr/local/etc/php/conf.d/newrelic.ini
-RUN curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
-  sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' && \
-  apt-get update  && \
-  apt-get install -y newrelic-php5  && \ 
-  apt-get clean && \
-  ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20131226.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/newrelic.so
 
 # install sumologic
 RUN apt-get -qq update && apt-get install -y wget && \
-    curl -L -o /tmp/sumocollector.deb https://collectors.au.sumologic.com/rest/download/deb/64  && \
-    dpkg -i /tmp/sumocollector.deb  && \
-    rm -f /tmp/sumocollector.deb
+    && curl -L -o /tmp/sumocollector.deb https://collectors.au.sumologic.com/rest/download/deb/64 \
+    && dpkg -i /tmp/sumocollector.deb \
+    && rm -f /tmp/sumocollector.deb
+COPY sumologic.conf /etc/sumo.conf
 
 #install node
 ENV NODE_VERSION 6.4.0
-# gpg keys listed at https://github.com/nodejs/node
 RUN set -ex \
   && for key in \
     9554F04D7259F04124DE6B476D5A82AC7E37093B \
@@ -49,7 +49,7 @@ RUN set -ex \
     C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8 \
   ; do \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-  done
+  done # gpg keys listed at https://github.com/nodejs/node
 
 RUN buildDeps='xz-utils' \
     && set -x \
