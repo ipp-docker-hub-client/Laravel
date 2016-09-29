@@ -28,6 +28,13 @@ RUN curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
   apt-get clean && \
   ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20131226.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/newrelic.so
 
+# install sumologic
+RUN apt-get -qq update && apt-get install -y wget && \
+    wget https://www.dropbox.com/path/to/sumocollector_19.91-2_amd64.deb  && \
+    dpkg -i sumocollector_19.91-2_amd64.deb  && \
+    rm sumocollector_19.91-2_amd64.deb  && \
+    echo -e "name=$sumoname\naccessid=sumoid\naccesskey=sumokey" > /etc/sumo.conf
+
 #install node
 ENV NODE_VERSION 6.4.0
 # gpg keys listed at https://github.com/nodejs/node
