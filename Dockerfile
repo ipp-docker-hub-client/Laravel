@@ -1,10 +1,5 @@
-
 FROM ipropertygroup/webserver:nginx-php-7
 MAINTAINER MOHSEN@IPROPERTY
-
-ENV DEBIAN_FRONTEND noninteractive
-ENV NPM_CONFIG_LOGLEVEL info
-ENV NR_INSTALL_SILENT true
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev git && rm -rf /var/lib/apt/lists/* \
@@ -20,24 +15,8 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$P
     && mv phpredis-$PHPREDIS_VERSION /usr/src/php/ext/redis \
     && docker-php-ext-install redis
 
-# install NewRelic
-ENV NEWRELIC_LICENSE **None**
-RUN curl -sL https://download.newrelic.com/548C16BF.gpg | apt-key add - \
-    && sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list' \
-    && apt-get update \
-    && apt-get install -y newrelic-php5 \ 
-    && apt-get clean \
-    && newrelic-install install
-COPY newrelic.ini /usr/local/etc/php/conf.d/newrelic.ini
-
-# install sumologic
-ENV SUMOLOGIC_KEY **None**
-RUN curl -L -o /tmp/sumocollector.deb https://collectors.au.sumologic.com/rest/download/deb/64 \
-    && dpkg -i /tmp/sumocollector.deb \
-    && rm -f /tmp/sumocollector.deb
-COPY sumologic.conf /etc/sumo.conf
-
 #install node
+ENV NPM_CONFIG_LOGLEVEL info
 ENV NODE_VERSION 6.4.0
 RUN set -ex \
   && for key in \
