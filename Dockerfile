@@ -58,7 +58,7 @@ RUN buildDeps='xz-utils' \
 #install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
-COPY docker-entrypoint.sh /entrypoint.sh
+Add entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
