@@ -18,7 +18,7 @@ then
       echo "Environment veriable is not set! Task aborted."
     fi
   echo "Setting up Newrelic configs ..."
-    if [ "${NEWRELIC_LICENSE}" != "**None**" ]
+    if [ "$NEWRELIC_LICENSE" != "" ]
     then
       sed -i "s/newrelic.enabled = false/newrelic.enabled = true/g" /usr/local/etc/php/conf.d/newrelic.ini
       sed -i "s/NRKEY/"${NEWRELIC_LICENSE}"/g" /usr/local/etc/php/conf.d/newrelic.ini
